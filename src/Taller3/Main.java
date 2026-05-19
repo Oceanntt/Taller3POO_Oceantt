@@ -1,0 +1,160 @@
+package Taller3;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class Main {
+
+public static void main(String[] args) throws FileNotFoundException {
+	Scanner scanner = new Scanner(System.in);
+	File magos = new File("Magos.txt");
+	File hechizos = new File("Hechizos.txt");
+	ArrayList<Mago> listamagos = new ArrayList<>();
+	ArrayList<Hechizo> listahechizos = new ArrayList<>();
+
+
+	System.out.println("Bienvenido al menu de magia\nIngrese el formato que desea\n1)Analista\n2)Administrador");
+	int opcion = pediropcion(scanner,1,2);
+	switch (opcion) {
+	case 1:
+		while(true) {
+	System.out.println("Bienvenido al menu de Analista");
+	System.out.println("1. Top 10 Mejores Hechizos\r\n"
+			+ "2. Top 3 Mejores Magos\r\n"
+			+ "3. Mostrar todos los Hechizos\r\n"
+			+ "4. Mostrar todos los magos\r\n"
+			+ "5. Mostrar todos los Hechizos junto a su puntuacion\r\n"
+			+ "6. Mostrar todos los magos junto a su puntuacion");
+		
+	int analizar = pediropcion(scanner,1,6);	
+	
+	
+		break;
+		
+		
+		}
+		
+		
+		
+		
+		
+		
+		break;
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	case 2:
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		break;
+		
+		
+		
+		
+		
+	default:
+		break;
+	}
+	
+	
+
+	
+	
+}
+
+
+
+
+
+
+public static int pediropcion(Scanner scanner,int primeraOpcion, int ultimaOpcion) {
+	int opcion = 0;
+    boolean valido = false;
+
+    while (!valido) {
+        try {
+            System.out.print("Ingrese una opción (" + primeraOpcion + "-" + ultimaOpcion + "): ");
+            opcion = scanner.nextInt();
+
+            if (opcion >= primeraOpcion && opcion <= ultimaOpcion) {
+                valido = true;
+            } else {
+                System.out.println("Error: opción fuera de rango.");
+            }
+
+        } catch (InputMismatchException e) {
+            System.out.println("Error: debe ingresar un número entero.");
+            scanner.nextLine(); //
+        }
+    }
+
+    return opcion;
+}
+
+public static ArrayList<Hechizo> leerhechizos(File hechizos) throws FileNotFoundException{
+	Scanner lector = new Scanner(hechizos);
+	ArrayList<Hechizo> listahechizos = new ArrayList<>();
+	while (lector.hasNextLine()) {
+		String linea = lector.nextLine();
+		String[] partes = linea.split(";");
+		String nombre = partes[0];
+		String tipo = partes[1];
+		int daño = Integer.parseInt(partes[2]);
+		if (tipo.equals("Tierra")) {
+			int mejora = Integer.parseInt(partes[3]);
+			Tierra tierra = new Tierra(nombre,daño,mejora);
+			listahechizos.add(tierra);
+		}
+		else if (tipo.equals("Fuego")) {
+			int quemadura = Integer.parseInt(partes[3]);
+			Fuego fuego = new Fuego(nombre,daño,quemadura);
+			listahechizos.add(fuego);
+			
+		}
+		else if (tipo.equals("Agua")) {
+			int heal = Integer.parseInt(partes[3]);
+			int presion = Integer.parseInt(partes[4]);
+			Agua agua = new Agua(nombre,daño,heal,presion);
+			listahechizos.add(agua);
+		}
+		else if (tipo.equals("Planta")) {
+			int stun = Integer.parseInt(partes[3]);
+			int cantidad = Integer.parseInt(partes[4]);
+			Planta planta = new Planta(nombre,daño,stun,cantidad);
+			listahechizos.add(planta);
+		}
+		
+	}
+	
+	return listahechizos;
+}
+	
+}
+
+
+
+
