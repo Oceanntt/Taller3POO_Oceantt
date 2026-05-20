@@ -30,7 +30,32 @@ public static void main(String[] args) throws FileNotFoundException {
 			+ "6. Mostrar todos los magos junto a su puntuacion");
 		
 	int analizar = pediropcion(scanner,1,6);	
-	
+	switch (analizar) {
+	case 1:
+		listahechizos = leerhechizos(hechizos);
+		listahechizos.sort((h1, h2) -> Integer.compare(h2.calcularPuntaje(), h1.calcularPuntaje()));
+		System.out.println("TOP 10 HECHIZOS:");
+
+		for (int i = 0; i <10; i++) {
+		    Hechizo h = listahechizos.get(i);
+
+		    System.out.println(
+		        (i + 1) + ") " +
+		        h.getNombre() +
+		        " -> Puntaje: " +
+		        h.calcularPuntaje()
+		    );
+		}
+		break;
+	case 2:
+	case 3:
+	case 4:
+	case 5: 
+	case 6:
+
+	default:
+		break;
+	}
 	
 		break;
 		
@@ -136,14 +161,16 @@ public static ArrayList<Hechizo> leerhechizos(File hechizos) throws FileNotFound
 			
 		}
 		else if (tipo.equals("Agua")) {
-			int heal = Integer.parseInt(partes[3]);
-			int presion = Integer.parseInt(partes[4]);
+			String[] stats = partes[3].split(",");
+			int heal = Integer.parseInt(stats[0]);
+			int presion = Integer.parseInt(stats[1]);
 			Agua agua = new Agua(nombre,daño,heal,presion);
 			listahechizos.add(agua);
 		}
 		else if (tipo.equals("Planta")) {
-			int stun = Integer.parseInt(partes[3]);
-			int cantidad = Integer.parseInt(partes[4]);
+			String[] stats = partes[3].split(",");
+			int stun = Integer.parseInt(stats[0]);
+			int cantidad = Integer.parseInt(stats[1]);
 			Planta planta = new Planta(nombre,daño,stun,cantidad);
 			listahechizos.add(planta);
 		}
@@ -152,7 +179,72 @@ public static ArrayList<Hechizo> leerhechizos(File hechizos) throws FileNotFound
 	
 	return listahechizos;
 }
+
+public static ArrayList<Mago> leermagos(File magos) throws FileNotFoundException{
+	Scanner lector = new Scanner(magos);
+	ArrayList<Mago> listamagos = new ArrayList<>();
 	
+	while (lector.hasNextLine()) {
+		ArrayList<Hechizo> listahechizos = new ArrayList<>();
+		String linea = lector.nextLine();
+		String[] partes = linea.split(";");
+		String nombre = partes[0];
+		String hechizosmago = partes[1];
+		String[] listahechizosmago = hechizosmago.split("|");
+		for (int i = 0; i < listahechizosmago.length; i++) {
+			listahechizos.add(buscarhechizo(listahechizosmago[i]));
+		}
+		Mago mago = new Mago(nombre,listahechizos);
+		listamagos.add(mago);
+	
+		
+	}
+	
+	return listamagos;
+	
+}
+	
+public static Hechizo buscarhechizo(String nombre) throws FileNotFoundException {
+	File hechizos = new File("Hechizos.txt");
+	Scanner lector = new Scanner(hechizos);
+	while (lector.hasNextLine()) {
+		String linea = lector.nextLine();
+		String[] partes = linea.split(";");
+		String nombreh = partes[0];
+		
+		if (nombre.equals(nombreh)) {
+			String tipo = partes[1];
+			int daño = Integer.parseInt(partes[2]);
+			if (tipo.equals("Tierra")) {
+				int mejora = Integer.parseInt(partes[3]);
+				Tierra tierra = new Tierra(nombre,daño,mejora);
+				return tierra;
+			}
+			else if (tipo.equals("Fuego")) {
+				int quemadura = Integer.parseInt(partes[3]);
+				Fuego fuego = new Fuego(nombre,daño,quemadura);
+				return fuego;
+			}
+			else if (tipo.equals("Agua")) {
+				String[] stats = partes[3].split(",");
+				int heal = Integer.parseInt(stats[0]);
+				int presion = Integer.parseInt(stats[1]);
+				Agua agua = new Agua(nombre,daño,heal,presion);
+				return agua;
+			}
+			else if (tipo.equals("Planta")) {
+				String[] stats = partes[3].split(",");
+				int stun = Integer.parseInt(stats[0]);
+				int cantidad = Integer.parseInt(stats[1]);
+				Planta planta = new Planta(nombre,daño,stun,cantidad);
+				return planta;
+			}
+		}
+		
+	}
+	return null;
+	
+}
 }
 
 

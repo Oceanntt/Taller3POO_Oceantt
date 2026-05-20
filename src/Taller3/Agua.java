@@ -10,9 +10,10 @@ int presion;
 	}
 
 	@Override
-	public double calcularPuntaje() {
+	public int calcularPuntaje() {
 
-		return 0;
+		this.puntaje =(daño+heal+presion)*2;
+		return puntaje;
 	}
 
 }

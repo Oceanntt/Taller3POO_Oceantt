@@ -8,9 +8,9 @@ public class Fuego extends Hechizo {
 	}
 
 	@Override
-	public double calcularPuntaje() {
-
-		return 0;
+	public int calcularPuntaje() {
+		this.puntaje = daño*quemadura;
+		return puntaje;
 	}
 
 }

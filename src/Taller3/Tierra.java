@@ -9,9 +9,10 @@ public class Tierra extends Hechizo  {
 	}
 
 	@Override
-	public double calcularPuntaje() {
-
-		return 0;
+	public int calcularPuntaje() {
+		this.puntaje = daño*mejora/2; 
+		return puntaje;
 	}
+	
 
 }

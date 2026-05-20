@@ -10,9 +10,9 @@ int stun;
 	}
 
 	@Override
-	public double calcularPuntaje() {
-
-		return 0;
+	public int calcularPuntaje() {
+		this.puntaje = daño + (stun*cantidad);
+		return puntaje;
 	}
 
 }
