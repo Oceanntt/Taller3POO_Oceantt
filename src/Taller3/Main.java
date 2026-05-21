@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class Main {
@@ -67,11 +68,23 @@ while (true) {
 		break;
 	case 4:
 		
-		
-		
+		listamagos = leermagos(magos);
+		for (int i = 0; i <listamagos.size(); i++) {
+			System.out.println(i+1+")"+listamagos.get(i).getNombre());
+		}
+		break;
 	case 5: 
+		listahechizos = leerhechizos(hechizos);
+		for (int i = 0; i < listahechizos.size(); i++) {
+			System.out.println(i+1+")"+listahechizos.get(i).getNombre()+" Puntuacion: "+ listahechizos.get(i).calcularPuntaje());
+		}
+		break;
 	case 6:
-
+		listamagos = leermagos(magos);
+		for (int i = 0; i <listamagos.size(); i++) {
+			System.out.println(i+1+")"+listamagos.get(i).getNombre()+" Puntuacion: "+ listamagos.get(i).calcularPuntaje());
+		}
+		break;
 	}
 	if (analizar == 7) {
 	    break;
