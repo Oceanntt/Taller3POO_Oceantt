@@ -15,7 +15,7 @@ public static void main(String[] args) throws FileNotFoundException {
 	ArrayList<Mago> listamagos = new ArrayList<>();
 	ArrayList<Hechizo> listahechizos = new ArrayList<>();
 
-
+while (true) {
 	System.out.println("Bienvenido al menu de magia\nIngrese el formato que desea\n1)Analista\n2)Administrador");
 	int opcion = pediropcion(scanner,1,2);
 	switch (opcion) {
@@ -27,47 +27,63 @@ public static void main(String[] args) throws FileNotFoundException {
 			+ "3. Mostrar todos los Hechizos\r\n"
 			+ "4. Mostrar todos los magos\r\n"
 			+ "5. Mostrar todos los Hechizos junto a su puntuacion\r\n"
-			+ "6. Mostrar todos los magos junto a su puntuacion");
+			+ "6. Mostrar todos los magos junto a su puntuacion\r\n"
+			+"7. Regresar");
 		
-	int analizar = pediropcion(scanner,1,6);	
+	int analizar = pediropcion(scanner,1,7);	
 	switch (analizar) {
+	case 7: break;
 	case 1:
 		listahechizos = leerhechizos(hechizos);
 		listahechizos.sort((h1, h2) -> Integer.compare(h2.calcularPuntaje(), h1.calcularPuntaje()));
-		System.out.println("TOP 10 HECHIZOS:");
+		System.out.println("TOP 10 MEJORES HECHIZOS:");
 
 		for (int i = 0; i <10; i++) {
 		    Hechizo h = listahechizos.get(i);
 
 		    System.out.println(
-		        (i + 1) + ") " +
-		        h.getNombre() +
-		        " -> Puntaje: " +
-		        h.calcularPuntaje()
-		    );
+		        (i + 1) + ") " + h.getNombre() + " -> Puntaje: " + h.calcularPuntaje());
 		}
 		break;
 	case 2:
+		listamagos = leermagos(magos);
+		listamagos.sort((m1,m2)->Integer.compare(m2.calcularPuntaje(), m1.calcularPuntaje()));
+		System.out.println("TOP 3 MEJORES MAGOS;");
+		for (int i = 0; i <3; i++) {
+		    Mago m = listamagos.get(i);
+
+		    System.out.println(
+		        (i + 1) + ") " +m.getNombre() + " -> Puntaje: " + m.calcularPuntaje());
+		}
+		
+		
+		break;
 	case 3:
+		
+		listahechizos = leerhechizos(hechizos);
+		for (int i = 0; i < listahechizos.size(); i++) {
+			System.out.println(i+1+")"+listahechizos.get(i).getNombre());
+		}
+		break;
 	case 4:
+		
+		
+		
 	case 5: 
 	case 6:
 
-	default:
-		break;
 	}
-	
-		break;
-		
-		
+	if (analizar == 7) {
+	    break;
+	}
+
 		}
-		
-		
-		
-		
-		
-		
 		break;
+	
+		
+		
+		
+		
 		
 		
 		
@@ -107,7 +123,7 @@ public static void main(String[] args) throws FileNotFoundException {
 	
 	
 
-	
+}
 	
 }
 
@@ -190,7 +206,7 @@ public static ArrayList<Mago> leermagos(File magos) throws FileNotFoundException
 		String[] partes = linea.split(";");
 		String nombre = partes[0];
 		String hechizosmago = partes[1];
-		String[] listahechizosmago = hechizosmago.split("|");
+		String[] listahechizosmago = hechizosmago.split("\\|");
 		for (int i = 0; i < listahechizosmago.length; i++) {
 			listahechizos.add(buscarhechizo(listahechizosmago[i]));
 		}
