@@ -1,7 +1,10 @@
 package Taller3;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Iterator;
@@ -9,7 +12,7 @@ import java.util.Scanner;
 
 public class Main {
 
-public static void main(String[] args) throws FileNotFoundException {
+public static void main(String[] args) throws IOException {
 	Scanner scanner = new Scanner(System.in);
 	File magos = new File("Magos.txt");
 	File hechizos = new File("Hechizos.txt");
@@ -76,13 +79,13 @@ while (true) {
 	case 5: 
 		listahechizos = leerhechizos(hechizos);
 		for (int i = 0; i < listahechizos.size(); i++) {
-			System.out.println(i+1+")"+listahechizos.get(i).getNombre()+" Puntuacion: "+ listahechizos.get(i).calcularPuntaje());
+			System.out.println(i+1+")"+listahechizos.get(i).getNombre()+": Puntuacion = "+ listahechizos.get(i).calcularPuntaje());
 		}
 		break;
 	case 6:
 		listamagos = leermagos(magos);
 		for (int i = 0; i <listamagos.size(); i++) {
-			System.out.println(i+1+")"+listamagos.get(i).getNombre()+" Puntuacion: "+ listamagos.get(i).calcularPuntaje());
+			System.out.println(i+1+")"+listamagos.get(i).getNombre()+": Puntuacion = "+ listamagos.get(i).calcularPuntaje());
 		}
 		break;
 	}
@@ -110,12 +113,53 @@ while (true) {
 	case 2:
 		
 		
+		System.out.println("1. Agregar Mago\r\n"
+				+ "2. Modificar Mago\r\n"
+				+ "3. Eliminar Mago\r\n"
+				+ "4. Agregar Hechizo\r\n"
+				+ "5. Modificar Hechizo\r\n"
+				+ "6. Eliminar Hechizo");
+		
+		 opcion = pediropcion(scanner,1,6);
 		
 		
-		
-		
-		
-		
+		switch (opcion) {
+		case 1:
+			System.out.print("Ingrese nombre del mago: ");
+			String nombre = scanner.nextLine();
+			String linea = nombre+";";
+			int contador = 0;
+			while (true) {
+				System.out.println("Ingrese nombre de hechizo del mago (0 para finalizar): ");
+				String buscar = scanner.nextLine();
+				if (buscar.equals("0") && contador >0) {
+					break;
+				}
+				else if(buscar.equals("0") && contador ==0) {
+					System.out.println("Debe tener minimo un hechizo para ser un mago");
+					continue;
+				}
+				Hechizo hechizo = buscarhechizo(buscar);
+				if (hechizo == null) {System.out.println("Hechizo inexistente");}
+				else {
+					linea += hechizo.getNombre()+"|";
+					contador+=1;
+				}
+				
+				
+				
+				
+			}
+			linea = linea.substring(0,linea.length()-1);
+	
+			agregarlinea(magos,linea);
+			
+			
+			break;
+
+		default:
+			break;
+		}
 		
 		
 		
@@ -153,6 +197,7 @@ public static int pediropcion(Scanner scanner,int primeraOpcion, int ultimaOpcio
         try {
             System.out.print("Ingrese una opción (" + primeraOpcion + "-" + ultimaOpcion + "): ");
             opcion = scanner.nextInt();
+            scanner.nextLine();
 
             if (opcion >= primeraOpcion && opcion <= ultimaOpcion) {
                 valido = true;
@@ -272,6 +317,17 @@ public static Hechizo buscarhechizo(String nombre) throws FileNotFoundException 
 		
 	}
 	return null;
+	
+}
+
+public static void agregarlinea(File archivo, String linea) throws IOException {
+	BufferedWriter escritor = new BufferedWriter(new FileWriter(archivo,true));
+	escritor.newLine();
+	escritor.write(linea);
+	escritor.close();
+	
+	
+	
 	
 }
 }
