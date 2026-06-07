@@ -163,7 +163,8 @@ while (true) {
 			
 		
 		case 3:
-			
+			eliminarlinea(scanner,magos);
+			System.out.println("Mago eliminado con exito");
 			break;
 			
 		case 4:
@@ -173,6 +174,12 @@ while (true) {
 			
 		case 5:
 			modificarlinea(hechizos,scanner,1);
+			break;
+		case 6:
+			eliminarlinea(scanner,hechizos);
+			System.out.println("Hechizo eliminado con exito");
+			
+			
 			break;
 		default:
 			break;
@@ -267,7 +274,7 @@ public static ArrayList<Hechizo> leerhechizos(File hechizos) throws FileNotFound
 		}
 		
 	}
-	
+	lector.close();
 	return listahechizos;
 }
 
@@ -290,7 +297,7 @@ public static ArrayList<Mago> leermagos(File magos) throws FileNotFoundException
 	
 		
 	}
-	
+	lector.close();
 	return listamagos;
 	
 }
@@ -333,6 +340,7 @@ public static Hechizo buscarhechizo(String nombre) throws FileNotFoundException 
 		}
 		
 	}
+	lector.close();
 	return null;
 	
 }
@@ -408,56 +416,57 @@ public static void modificarlinea(File archivo, Scanner scanner, int tipo) throw
 
 			lineas.set(opcion-1,linea);
 		}
+		lector.close();
 	}
 
 	else if (tipo == 1) { 
 
 		String nombre = partes[0];
+		String nombreViejo = nombre;
 		String tipohechizo = partes[1];
 		int daño = Integer.parseInt(partes[2]);
 
 		if (tipohechizo.equals("Tierra")) {
 			System.out.println("Que deseas modificar\n1)Nombre\n2)Daño\n3)Mejora");
 			int opcion2 = pediropcion(scanner,1,3);
-
+			int mejora = Integer.parseInt(partes[3]);
 			if (opcion2 == 1) {
-				System.out.print("Ingrese nuevo nombre: ");
-				nombre = scanner.nextLine();
+			    nombre = scanner.nextLine();
+			    actualizarNombreHechizoEnMagos(nombreViejo, nombre);
 			}
 			else if (opcion2 == 2) {
-				System.out.print("Ingrese nuevo daño: ");
-				daño = scanner.nextInt();
-				scanner.nextLine();
+			    daño = scanner.nextInt();
+			    scanner.nextLine();
 			}
 			else if (opcion2 == 3) {
-				System.out.print("Ingrese nueva mejora: ");
-				int mejora = scanner.nextInt();
-				scanner.nextLine();
-
-				lineas.set(opcion-1,nombre+";Tierra;"+daño+";"+mejora);
+			    mejora = scanner.nextInt();
+			    scanner.nextLine();
 			}
+
+			lineas.set(opcion-1,nombre+";Tierra;"+daño+";"+mejora);
 		}
 
 		else if (tipohechizo.equals("Fuego")) {
 			System.out.println("Que deseas modificar\n1)Nombre\n2)Daño\n3)Quemadura");
 			int opcion2 = pediropcion(scanner,1,3);
+			int quemadura = Integer.parseInt(partes[3]);
 
 			if (opcion2 == 1) {
-				System.out.print("Ingrese nuevo nombre: ");
-				nombre = scanner.nextLine();
+			    nombre = scanner.nextLine();
+			    actualizarNombreHechizoEnMagos(nombreViejo, nombre);
 			}
 			else if (opcion2 == 2) {
-				System.out.print("Ingrese nuevo daño: ");
-				daño = scanner.nextInt();
-				scanner.nextLine();
+			    daño = scanner.nextInt();
+			    scanner.nextLine();
+			}
+			else if (opcion2 == 3) {
+			    System.out.print("Ingrese nueva quemadura: ");
+			    quemadura = scanner.nextInt();
+			    scanner.nextLine();
 			}
 
-			System.out.print("Ingrese nueva quemadura: ");
-			int quemadura = scanner.nextInt();
-			scanner.nextLine();
-
 			lineas.set(opcion-1,nombre+";Fuego;"+daño+";"+quemadura);
-		}
+			}
 
 		else if (tipohechizo.equals("Agua")) {
 			String[] stats = partes[3].split(",");
@@ -470,6 +479,7 @@ public static void modificarlinea(File archivo, Scanner scanner, int tipo) throw
 			if (opcion2 == 1) {
 				System.out.print("Ingrese nuevo nombre: ");
 				nombre = scanner.nextLine();
+				actualizarNombreHechizoEnMagos(nombreViejo, nombre);
 			}
 			else if (opcion2 == 2) {
 				System.out.print("Ingrese nuevo daño: ");
@@ -501,6 +511,7 @@ public static void modificarlinea(File archivo, Scanner scanner, int tipo) throw
 			if (opcion2 == 1) {
 				System.out.print("Ingrese nuevo nombre: ");
 				nombre = scanner.nextLine();
+			    actualizarNombreHechizoEnMagos(nombreViejo, nombre);
 			}
 			else if (opcion2 == 2) {
 				System.out.print("Ingrese nuevo daño: ");
@@ -523,12 +534,124 @@ public static void modificarlinea(File archivo, Scanner scanner, int tipo) throw
 	}
 	BufferedWriter escritor = new BufferedWriter(new FileWriter(archivo));
 	for (int i = 0; i < lineas.size(); i++) {
+		if (i==lineas.size()-1) {
+			escritor.write(lineas.get(i));
+		}
+		else {
 		escritor.write(lineas.get(i)+"\n");
-		
+		}	
 	}
+
 	escritor.flush();
 	escritor.close();
 }
+public static void actualizarNombreHechizoEnMagos(String nombreViejo, String nombreNuevo) throws IOException {
+    File magos = new File("Magos.txt");
+
+    Scanner lector = new Scanner(magos);
+    ArrayList<String> lineas = new ArrayList<>();
+
+    while (lector.hasNextLine()) {
+        String linea = lector.nextLine();
+
+        String[] partes = linea.split(";");
+
+        if (partes.length < 2) {
+            lineas.add(linea);
+            continue;
+        }
+
+        String nombreMago = partes[0];
+        String[] hechizos = partes[1].split("\\|");
+
+        for (int i = 0; i < hechizos.length; i++) {
+            if (hechizos[i].equals(nombreViejo)) {
+                hechizos[i] = nombreNuevo;
+            }
+        }
+
+        String nuevaLinea = nombreMago + ";" + String.join("|", hechizos);
+        lineas.add(nuevaLinea);
+    }
+
+    lector.close();
+
+    BufferedWriter escritor = new BufferedWriter(new FileWriter(magos));
+
+    for (int i = 0; i < lineas.size(); i++) {
+        escritor.write(lineas.get(i));
+
+        if (i < lineas.size() - 1) {
+            escritor.newLine();
+        }
+    }
+
+    escritor.close();
+}
+
+public static void eliminarlinea(Scanner scanner, File arch) throws IOException {
+    Scanner lector = new Scanner(arch);
+    int contador = 0;
+    ArrayList<String> lineas = new ArrayList<>();
+    while (lector.hasNextLine()) {
+        contador++;
+        String linea = lector.nextLine();
+        lineas.add(linea);
+        System.out.println(contador + ")" + linea);
+    }
+    System.out.println("Cual deseas eliminar?");
+    int opcion = pediropcion(scanner, 1, contador);
+    String lineaEliminada = lineas.get(opcion - 1);
+    lineas.remove(opcion - 1);
+    BufferedWriter escritor = new BufferedWriter(new FileWriter(arch));
+
+    for (int i = 0; i < lineas.size(); i++) {
+        if (i == lineas.size() - 1) {
+            escritor.write(lineas.get(i));
+        } else {
+            escritor.write(lineas.get(i) + "\n");
+        }
+    }
+
+    escritor.close();
+    lector.close();
+    if (arch.getName().equals("Hechizos.txt")) {
+        String nombreHechizo = lineaEliminada.split(";")[0];
+        File magos = new File("Magos.txt");
+        Scanner lectorMagos = new Scanner(magos);
+        ArrayList<String> nuevasLineas = new ArrayList<>();
+
+        while (lectorMagos.hasNextLine()) {
+            String linea = lectorMagos.nextLine();
+            String[] partes = linea.split(";");
+            String nombreMago = partes[0];
+            String[] hechizos = partes[1].split("\\|");
+            String nuevaLista = "";
+            for (int i = 0; i < hechizos.length; i++) {
+                if (!hechizos[i].equals(nombreHechizo)) {
+                    if (!nuevaLista.equals("")) {
+                        nuevaLista += "|";
+                    }
+                    nuevaLista += hechizos[i];
+                }
+            }
+            if (!nuevaLista.equals("")) {
+                nuevasLineas.add(nombreMago + ";" + nuevaLista);
+            }
+        }
+        lectorMagos.close();
+        BufferedWriter escritorMagos = new BufferedWriter(new FileWriter(magos));
+        for (int i = 0; i < nuevasLineas.size(); i++) {
+            if (i == nuevasLineas.size() - 1) {
+                escritorMagos.write(nuevasLineas.get(i));
+            } else {
+                escritorMagos.write(nuevasLineas.get(i) + "\n");
+            }
+        }
+        escritorMagos.close();
+    }
+}
+
 }
 
 
