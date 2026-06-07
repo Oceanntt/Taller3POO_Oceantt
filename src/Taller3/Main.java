@@ -157,6 +157,23 @@ while (true) {
 			
 			break;
 
+		case 2:
+			modificarlinea(magos,scanner,0);
+			break;
+			
+		
+		case 3:
+			
+			break;
+			
+		case 4:
+			
+			break;
+			
+			
+		case 5:
+			modificarlinea(hechizos,scanner,1);
+			break;
 		default:
 			break;
 		}
@@ -329,6 +346,188 @@ public static void agregarlinea(File archivo, String linea) throws IOException {
 	
 	
 	
+}
+public static void modificarlinea(File archivo, Scanner scanner, int tipo) throws IOException{
+	Scanner lector = new Scanner(archivo);
+	int contador = 0;
+	ArrayList<String> lineas = new ArrayList<>();
+
+	while (lector.hasNextLine()) {
+		contador++;
+		String linea = lector.nextLine();
+		lineas.add(linea);
+		System.out.println(contador+")"+linea);
+
+	}
+
+	int opcion = pediropcion(scanner,1,contador);
+	String lineamod = lineas.get(opcion-1);
+	String[] partes = lineamod.split(";");
+
+	if (tipo == 0) { 
+		System.out.println("Que deseas modificar\n1)Nombre\n2)Hechizos");
+		int opcion2 = pediropcion(scanner,1,2);
+
+		if (opcion2 == 1) {
+			System.out.print("Ingrese nuevo nombre: ");
+			String nombre = scanner.nextLine();
+
+			String nuevalinea = nombre + ";" + partes[1];
+			lineas.set(opcion-1, nuevalinea);
+		}
+
+		else if (opcion2 == 2) {
+			String linea = partes[0] + ";";
+			int contadorhechizos = 0;
+
+			while (true) {
+				System.out.println("Ingrese nombre de hechizo del mago (0 para finalizar): ");
+				String buscar = scanner.nextLine();
+
+				if (buscar.equals("0") && contadorhechizos > 0) {
+					break;
+				}
+
+				else if (buscar.equals("0") && contadorhechizos == 0) {
+					System.out.println("Debe tener minimo un hechizo para ser un mago");
+					continue;
+				}
+
+				Hechizo hechizo = buscarhechizo(buscar);
+
+				if (hechizo == null) {
+					System.out.println("Hechizo inexistente");
+				}
+				else {
+					linea += hechizo.getNombre()+"|";
+					contadorhechizos++;
+				}
+			}
+
+			linea = linea.substring(0,linea.length()-1);
+
+			lineas.set(opcion-1,linea);
+		}
+	}
+
+	else if (tipo == 1) { 
+
+		String nombre = partes[0];
+		String tipohechizo = partes[1];
+		int daño = Integer.parseInt(partes[2]);
+
+		if (tipohechizo.equals("Tierra")) {
+			System.out.println("Que deseas modificar\n1)Nombre\n2)Daño\n3)Mejora");
+			int opcion2 = pediropcion(scanner,1,3);
+
+			if (opcion2 == 1) {
+				System.out.print("Ingrese nuevo nombre: ");
+				nombre = scanner.nextLine();
+			}
+			else if (opcion2 == 2) {
+				System.out.print("Ingrese nuevo daño: ");
+				daño = scanner.nextInt();
+				scanner.nextLine();
+			}
+			else if (opcion2 == 3) {
+				System.out.print("Ingrese nueva mejora: ");
+				int mejora = scanner.nextInt();
+				scanner.nextLine();
+
+				lineas.set(opcion-1,nombre+";Tierra;"+daño+";"+mejora);
+			}
+		}
+
+		else if (tipohechizo.equals("Fuego")) {
+			System.out.println("Que deseas modificar\n1)Nombre\n2)Daño\n3)Quemadura");
+			int opcion2 = pediropcion(scanner,1,3);
+
+			if (opcion2 == 1) {
+				System.out.print("Ingrese nuevo nombre: ");
+				nombre = scanner.nextLine();
+			}
+			else if (opcion2 == 2) {
+				System.out.print("Ingrese nuevo daño: ");
+				daño = scanner.nextInt();
+				scanner.nextLine();
+			}
+
+			System.out.print("Ingrese nueva quemadura: ");
+			int quemadura = scanner.nextInt();
+			scanner.nextLine();
+
+			lineas.set(opcion-1,nombre+";Fuego;"+daño+";"+quemadura);
+		}
+
+		else if (tipohechizo.equals("Agua")) {
+			String[] stats = partes[3].split(",");
+			int heal = Integer.parseInt(stats[0]);
+			int presion = Integer.parseInt(stats[1]);
+
+			System.out.println("Que deseas modificar\n1)Nombre\n2)Daño\n3)Heal\n4)Presion");
+			int opcion2 = pediropcion(scanner,1,4);
+
+			if (opcion2 == 1) {
+				System.out.print("Ingrese nuevo nombre: ");
+				nombre = scanner.nextLine();
+			}
+			else if (opcion2 == 2) {
+				System.out.print("Ingrese nuevo daño: ");
+				daño = scanner.nextInt();
+				scanner.nextLine();
+			}
+			else if (opcion2 == 3) {
+				System.out.print("Ingrese nuevo heal: ");
+				heal = scanner.nextInt();
+				scanner.nextLine();
+			}
+			else if (opcion2 == 4) {
+				System.out.print("Ingrese nueva presion: ");
+				presion = scanner.nextInt();
+				scanner.nextLine();
+			}
+
+			lineas.set(opcion-1,nombre+";Agua;"+daño+";"+heal+","+presion);
+		}
+
+		else if (tipohechizo.equals("Planta")) {
+			String[] stats = partes[3].split(",");
+			int stun = Integer.parseInt(stats[0]);
+			int cantidad = Integer.parseInt(stats[1]);
+
+			System.out.println("Que deseas modificar\n1)Nombre\n2)Daño\n3)Stun\n4)Cantidad");
+			int opcion2 = pediropcion(scanner,1,4);
+
+			if (opcion2 == 1) {
+				System.out.print("Ingrese nuevo nombre: ");
+				nombre = scanner.nextLine();
+			}
+			else if (opcion2 == 2) {
+				System.out.print("Ingrese nuevo daño: ");
+				daño = scanner.nextInt();
+				scanner.nextLine();
+			}
+			else if (opcion2 == 3) {
+				System.out.print("Ingrese nuevo stun: ");
+				stun = scanner.nextInt();
+				scanner.nextLine();
+			}
+			else if (opcion2 == 4) {
+				System.out.print("Ingrese nueva cantidad: ");
+				cantidad = scanner.nextInt();
+				scanner.nextLine();
+			}
+
+			lineas.set(opcion-1,nombre+";Planta;"+daño+";"+stun+","+cantidad);
+		}
+	}
+	BufferedWriter escritor = new BufferedWriter(new FileWriter(archivo));
+	for (int i = 0; i < lineas.size(); i++) {
+		escritor.write(lineas.get(i)+"\n");
+		
+	}
+	escritor.flush();
+	escritor.close();
 }
 }
 
