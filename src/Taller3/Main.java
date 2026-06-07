@@ -100,16 +100,6 @@ while (true) {
 		
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 	case 2:
 		
 		
@@ -168,10 +158,126 @@ while (true) {
 			break;
 			
 		case 4:
-			
+			System.out.print("Ingrese nombre del hechizo: ");
+			 nombre = scanner.nextLine();
+			 linea = nombre+";";
+			 String tipo = "";
+			 int daño = 0;
+			while (true) {
+				System.out.print("Ingrese Tipo del hechizo:");
+				 tipo = scanner.nextLine();
+				if (!tipo.equals("Fuego")&&!tipo.equals("Agua")&&!tipo.equals("Tierra")&&!tipo.equals("Planta")) {
+					System.out.println("Tipo invalido");
+					continue;
+				}
+				else {break;}
+			}
+			while(true) {
+				System.out.print("Ingrese daño del hechizo:");
+				try {
+					daño = scanner.nextInt();
+					scanner.nextLine();
+					
+				} catch (Exception e) {
+					System.out.println("Ingrese un numero");
+					continue;
+				}
+				break;
+			}
+			if (tipo.equals("Tierra")) {
+			    int mejora = 0;
+			    while (true) {
+			        System.out.print("Ingrese mejora de defensa: ");
+			        try {
+			            mejora = scanner.nextInt();
+			            scanner.nextLine();
+			            break;
+			        }
+			        catch (Exception e) {
+			            System.out.println("Ingrese un numero");
+			            scanner.nextLine();
+			        }
+			    }
+			    linea += tipo + ";" + daño + ";" + mejora;
+			}
+			else if (tipo.equals("Fuego")) {
+			    int quemadura = 0;
+			    while (true) {
+			        System.out.print("Ingrese quemadura: ");
+			        try {
+			            quemadura = scanner.nextInt();
+			            scanner.nextLine();
+			            break;
+			        }
+			        catch (Exception e) {
+			            System.out.println("Ingrese un numero");
+			            scanner.nextLine();
+			        }
+			    }
+			    linea += tipo + ";" + daño + ";" + quemadura;
+			}
+
+			else if (tipo.equals("Agua")) {
+			    int heal = 0;
+			    int presion = 0;
+			    while (true) {
+			        System.out.print("Ingrese heal: ");
+			        try {
+			            heal = scanner.nextInt();
+			            scanner.nextLine();
+			            break;
+			        }
+			        catch (Exception e) {
+			            System.out.println("Ingrese un numero");
+			            scanner.nextLine();
+			        }
+			    }
+			    while (true) {
+			        System.out.print("Ingrese presion: ");
+			        try {
+			            presion = scanner.nextInt();
+			            scanner.nextLine();
+			            break;
+			        }
+			        catch (Exception e) {
+			            System.out.println("Ingrese un numero");
+			            scanner.nextLine();
+			        }
+			    }
+
+			    linea += tipo + ";" + daño + ";" + heal + "," + presion;
+			}
+			else if (tipo.equals("Planta")) {
+			    int stun = 0;
+			    int cantidad = 0;
+			    while (true) {
+			        System.out.print("Ingrese stun: ");
+			        try {
+			            stun = scanner.nextInt();
+			            scanner.nextLine();
+			            break;
+			        }
+			        catch (Exception e) {
+			            System.out.println("Ingrese un numero");
+			            scanner.nextLine();
+			        }
+			    }
+			    while (true) {
+			        System.out.print("Ingrese cantidad: ");
+			        try {
+			            cantidad = scanner.nextInt();
+			            scanner.nextLine();
+			            break;
+			        }
+			        catch (Exception e) {
+			            System.out.println("Ingrese un numero");
+			            scanner.nextLine();
+			        }
+			    }
+			    linea += tipo + ";" + daño + ";" + stun + "," + cantidad;
+			}
+			agregarlinea(hechizos,linea);
 			break;
-			
-			
 		case 5:
 			modificarlinea(hechizos,scanner,1);
 			break;
